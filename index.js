@@ -17,10 +17,8 @@ app.use(session({
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
-let viewCount = 0;
-
 app.get('/', (req, res) => {
-    res.render('home', { viewCount: ++viewCount });
+    res.render('home', { name: req.session.name });
 });
 
 app.get('/signUp', (req, res) => res.render('signUp'));
@@ -32,6 +30,17 @@ app.post('/signUp', parser, (req, res) => {
     user.signUp()
     .then(() => res.send('DANG_KY_THANH_CONG'))
     .catch(() => res.send('DANG_KY_THAT_BAI'));
+});
+
+app.post('/signIn', parser, (req, res) => {
+    const { email, password } = req.body;
+    const user = new User(email, password);
+    user.signIn()
+    .then((name) => {
+        req.session.name = name; // eslint-disable-line
+        res.send('DANG_NHAP_THANH_CONG');
+    })
+    .catch(() => res.send('DANG_NHAP_THAT_BAI'));
 });
 
 // app.get('/muave', (req, res) => {

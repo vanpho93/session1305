@@ -17,14 +17,16 @@ class User {
     }
 
     signIn() {
+        let name;
         const sql = 'SELECT * FROM "User" WHERE email = $1';
         return queryDB(sql, [this.email])
         .then(result => {
             if (!result.rows[0]) throw new Error('EMAIL_KHONG_TON_TAI');
-            return compare(this.password, result.rows[0].password)
-            .then(res => {
-                if (!res) throw new Error('SAI_MAT_KHAU');
-            });
+            name = result.rows[0].name;
+            return compare(this.password, result.rows[0].password);
+        }).then(res => {
+            if (!res) throw new Error('SAI_MAT_KHAU');
+            return name;
         });
     }
 }
