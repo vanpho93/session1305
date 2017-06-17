@@ -1,4 +1,4 @@
-const { hash } = require('bcrypt');
+const { hash, compare } = require('bcrypt');
 const queryDB = require('./db');
 
 class User {
@@ -17,13 +17,21 @@ class User {
     }
 
     signIn() {
-
+        const sql = 'SELECT * FROM "User" WHERE email = $1';
+        return queryDB(sql, [this.email])
+        .then(result => {
+            if (!result.rows[0]) throw new Error('EMAIL_KHONG_TON_TAI');
+            return compare(this.password, result.rows[0].password)
+            .then(res => {
+                if (!res) throw new Error('SAI_MAT_KHAU');
+            });
+        });
     }
 }
 
-// const pho = new User('vanpho01@gmail.com', '123', 'Pho', '09267362232');
-// pho.signUp()
+// const pho = new User('vanpho01@gmail.com', '123');
+// pho.signIn()
 // .then(() => console.log('THANH_CONG'))
-// .catch(() => console.log('THAT_BAI'));
+// .catch(err => console.log('THAT_BAI: ' + err));
 
 module.exports = User;
