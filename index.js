@@ -29,8 +29,16 @@ app.get('/', (req, res) => {
     });
 });
 
-app.get('/signUp', (req, res) => res.render('signUp'));
-app.get('/signIn', (req, res) => res.render('signIn'));
+function redirectIfSignedIn(req, res, next) {
+    if (!req.cookies.TOKEN) return next();
+    jwt.verify(req.cookies.TOKEN, SECKET_KEY, (err, obj) => {
+        if (err) return next();
+        res.redirect('/');
+    });
+}
+
+app.get('/signUp', redirectIfSignedIn, (req, res) => res.render('signUp'));
+app.get('/signIn', redirectIfSignedIn, (req, res) => res.render('signIn'));
 
 app.post('/signUp', parser, (req, res) => {
     const { email, name, phone, password } = req.body;
