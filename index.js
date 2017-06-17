@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const parser = require('body-parser').urlencoded({ extended: false });
+const cookieParser = require('cookie-parser');
 const User = require('./User');
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }));
+app.use(cookieParser());
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
