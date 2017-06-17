@@ -1,5 +1,7 @@
 const express = require('express');
 const session = require('express-session');
+const parser = require('body-parser').urlencoded({ extended: false });
+const User = require('./User');
 
 const app = express();
 app.listen(process.env.PORT || 3000, () => console.log('Server started'));
@@ -23,6 +25,14 @@ app.get('/', (req, res) => {
 
 app.get('/signUp', (req, res) => res.render('signUp'));
 app.get('/signIn', (req, res) => res.render('signIn'));
+
+app.post('/signUp', parser, (req, res) => {
+    const { email, name, phone, password } = req.body;
+    const user = new User(email, password, name, phone);
+    user.signUp()
+    .then(() => res.send('DANG_KY_THANH_CONG'))
+    .catch(() => res.send('DANG_KY_THAT_BAI'));
+});
 
 // app.get('/muave', (req, res) => {
 //     req.session.daMuaVe = true; // eslint-disable-line

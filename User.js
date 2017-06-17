@@ -21,10 +21,9 @@ class User {
     }
 }
 
-const pho = new User('vanpho01@gmail.com', '123', 'Pho', '09267362232');
-
-pho.signUp()
-.then(() => console.log('THANH_CONG'))
-.catch(() => console.log('THAT_BAI'));
+// const pho = new User('vanpho01@gmail.com', '123', 'Pho', '09267362232');
+// pho.signUp()
+// .then(() => console.log('THANH_CONG'))
+// .catch(() => console.log('THAT_BAI'));
 
 module.exports = User;
